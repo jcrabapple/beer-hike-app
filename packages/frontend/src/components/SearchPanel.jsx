@@ -119,7 +119,11 @@ export function SearchPanel() {
   };
 
   const handleLocate = () => {
-    if (navigator.geolocation) {
+    if (userLocation) {
+      setMapCenter(userLocation.lat, userLocation.lon);
+      fetchNearbyTrails(userLocation.lat, userLocation.lon, 25);
+      fetchNearbyBreweries(userLocation.lat, userLocation.lon, 25);
+    } else if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -129,7 +133,7 @@ export function SearchPanel() {
           fetchNearbyBreweries(latitude, longitude, 25);
         },
         (error) => {
-          console.error('Geolocation error:', error);
+          alert('Unable to get your location. Please try again or use the search box.');
         }
       );
     }
