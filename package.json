@@ -1,0 +1,20 @@
+{
+  "name": "beer-hike-app",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w packages/backend\" \"npm run dev -w packages/frontend\"",
+    "build": "npm run build -w packages/backend && npm run build -w packages/frontend",
+    "test": "npm test -w packages/backend && npm test -w packages/frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "postgis": "^1.0.6"
+  }
+}
