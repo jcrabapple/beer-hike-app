@@ -40,11 +40,13 @@ export function SearchPanel() {
       return;
     }
 
+    const apiBase = import.meta.env.VITE_API_BASE || '/api';
+
     try {
       let formatted = [];
 
       if (searchType === 'all' || searchType === 'trails') {
-        const trailsRes = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const trailsRes = await fetch(`${apiBase}/search?q=${encodeURIComponent(query)}`);
         const trails = await trailsRes.json();
         formatted.push(...trails.filter(r => r.type === 'trail').map(result => ({
           type: result.type,
@@ -55,7 +57,7 @@ export function SearchPanel() {
       }
 
       if (searchType === 'all' || searchType === 'breweries') {
-        const breweriesRes = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const breweriesRes = await fetch(`${apiBase}/search?q=${encodeURIComponent(query)}`);
         const breweries = await breweriesRes.json();
         formatted.push(...breweries.filter(r => r.type === 'brewery').map(result => ({
           type: result.type,
@@ -66,7 +68,7 @@ export function SearchPanel() {
       }
 
       if (searchType === 'all' || searchType === 'cities') {
-        const geocodeRes = await fetch(`/api/geocode?q=${encodeURIComponent(query)}`);
+        const geocodeRes = await fetch(`${apiBase}/geocode?q=${encodeURIComponent(query)}`);
         if (geocodeRes.ok) {
           const locations = await geocodeRes.json();
           formatted.push(...(Array.isArray(locations) ? locations.map(result => ({
