@@ -35,10 +35,7 @@ beer-hike-app/
 ### Prerequisites
 - Node.js 18+
 - PostgreSQL with PostGIS extension
-- Auth0 account (for authentication)
 - Mapbox API token
-- Hiking Project API key
-- Open Brewery DB (free, no key needed)
 
 ### Installation
 
@@ -54,35 +51,25 @@ createdb beer_hike_app
 psql beer_hike_app < packages/backend/schema.sql
 ```
 
-3. Set up Auth0:
-   - Create an Auth0 application
-   - Create an API in Auth0
-   - Note your domain, client ID, and API identifier
-
-4. Set up environment variables:
+3. Set up environment variables:
 ```bash
 cp packages/backend/.env.example packages/backend/.env
 cp packages/frontend/.env.example packages/frontend/.env
 ```
 
-5. Fill in your `.env` files:
+4. Fill in your `.env` files:
 
 **Backend (.env):**
 ```
 DATABASE_URL=postgresql://user:password@localhost:5432/beer_hike_app
 PORT=3001
 NODE_ENV=development
-HIKING_PROJECT_API_KEY=your_key
-AUTH0_DOMAIN=your_domain.auth0.com
-AUTH0_AUDIENCE=your_api_identifier
+MAPBOX_TOKEN=your_mapbox_token
 ```
 
 **Frontend (.env):**
 ```
-VITE_MAPBOX_TOKEN=your_token
-VITE_AUTH0_DOMAIN=your_domain.auth0.com
-VITE_AUTH0_CLIENT_ID=your_client_id
-VITE_AUTH0_AUDIENCE=your_api_identifier
+VITE_MAPBOX_TOKEN=your_mapbox_token
 ```
 
 ### Development
@@ -110,34 +97,32 @@ Or the sync runs automatically every day at 2 AM.
 npm run build
 ```
 
-## Features (MVP)
+## Features
 
 - Geolocation-based trail and brewery search
 - Interactive map with Mapbox
-- Trail and brewery filtering
-- Pairing suggestions
-- User authentication with Auth0
-- Save favorite pairings
+- Search trails, breweries, and cities nationwide
+- Consolidated trail display with multiple entry points
 - Responsive design for mobile and desktop
+- 27,000+ NPS trails
+- 10,000+ breweries from Open Brewery DB
 
 ## API Endpoints
 
 **Public:**
 - `GET /api/health` - Health check
-- `GET /api/trails/nearby?lat=X&lon=Y&radius=10` - Nearby trails
+- `GET /api/trails/nearby?lat=X&lon=Y&radius=10` - Nearby trails (consolidated by name)
+- `GET /api/trails/entries/:name?lat=X&lon=Y&radius=10` - All entry points for a trail
 - `GET /api/breweries/nearby?lat=X&lon=Y&radius=10` - Nearby breweries
-- `GET /api/pairings/suggest?trail_id=X&radius=5` - Suggested breweries for trail
-
-**Authenticated:**
-- `POST /api/pairings/save` - Save a trail/brewery pairing
-- `GET /api/pairings/saved` - Get user's saved pairings
+- `GET /api/search?q=query` - Search trails and breweries
+- `GET /api/geocode?q=query` - Search cities/locations
 
 **Admin:**
 - `POST /api/admin/sync` - Manually trigger data sync
 
 ## Data Sources
 
-- **Trails**: Hiking Project API
-- **Breweries**: Open Brewery DB
+- **Trails**: National Park Service (27,000+ trails)
+- **Breweries**: Open Brewery DB (10,000+ breweries)
 - **Maps**: Mapbox GL
-- **Weather**: OpenWeatherMap (future)
+- **Geocoding**: Mapbox Geocoding API
