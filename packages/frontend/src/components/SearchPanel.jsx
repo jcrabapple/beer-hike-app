@@ -118,14 +118,36 @@ export function SearchPanel() {
     }
   };
 
+  const handleLocate = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ lat: latitude, lon: longitude });
+          setMapCenter(latitude, longitude);
+          fetchNearbyTrails(latitude, longitude, 25);
+          fetchNearbyBreweries(latitude, longitude, 25);
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+        }
+      );
+    }
+  };
+
   return (
     <div className="absolute top-0 left-0 w-full md:w-96 h-screen md:h-auto bg-white shadow-lg overflow-y-auto z-10">
       <div className="p-4 md:p-6">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Beer & Hike</h1>
-          <button onClick={handleRefresh} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm">
-            Refresh
-          </button>
+          <div className="flex gap-2">
+            <button onClick={handleLocate} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm">
+              📍
+            </button>
+            <button onClick={handleRefresh} className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm">
+              Refresh
+            </button>
+          </div>
         </div>
 
         <div className="mb-4 relative">
