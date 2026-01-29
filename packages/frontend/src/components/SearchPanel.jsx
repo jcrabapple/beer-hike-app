@@ -99,8 +99,9 @@ export function SearchPanel() {
     setSelectedTrailDetails(trail);
     if (userLocation && trail.entry_count > 1) {
       try {
+        const apiBase = import.meta.env.VITE_API_BASE || '/api';
         const response = await fetch(
-          `/api/trails/entries/${encodeURIComponent(trail.name)}?lat=${userLocation.lat}&lon=${userLocation.lon}&radius=25`
+          `${apiBase}/trails/entries/${encodeURIComponent(trail.name)}?lat=${userLocation.lat}&lon=${userLocation.lon}&radius=25`
         );
         const entries = await response.json();
         setTrailEntries(entries);
